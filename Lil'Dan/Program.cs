@@ -8,7 +8,11 @@ namespace Lil_Dan
 {
     class Program
     {
+        public const string USERNAME = "Everland Games Bot";
+        public const string DESCRIMINATOR = "2557";
+
         public static DiscordSocketClient Client { get; private set; }
+        public static SocketUser User { get; private set; }
 
         public static void Main(string[] args)
         {
@@ -32,12 +36,16 @@ namespace Lil_Dan
             
             await Client.LoginAsync(TokenType.Bot, token);
             await Client.StartAsync();
+
+            await LevelHandler.PollMessageDeltas();
             
             // Block this task until the program is closed.
             await Task.Delay(-1);
         }
         private static Task Initalize()
         {
+            User = Client.GetUser(USERNAME, DESCRIMINATOR);
+            
             LevelRoles.CreateRoles(Client);
             EventManager.RegisterEvents(Client);
             EventHandlerRegister.RegisterEventHandlers();
