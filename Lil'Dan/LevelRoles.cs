@@ -48,7 +48,7 @@ namespace Lil_Dan
             // Ensure all roles have been assigned
             foreach (ulong roleID in roleIDs)
             {
-                if(!roleObjects.Any(x => x.Id == roleID))
+                if (!roleObjects.Any(x => x.Id == roleID))
                 {
                     throw new NullReferenceException($"No role could be found for {roleID}");
                 }

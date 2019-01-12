@@ -8,6 +8,8 @@ namespace Lil_Dan
 {
     class Program
     {
+        public static DiscordSocketClient Client { get; private set; }
+
         public static void Main(string[] args)
         {
             string token = args[0];
@@ -23,19 +25,24 @@ namespace Lil_Dan
 
         public async Task MainAsync(string token)
         {
-            DiscordSocketClient client = new DiscordSocketClient();
-            LevelRoles.CreateRoles(client);
+            Client = new DiscordSocketClient();
+            Client.Ready += Initalize;
 
-            client.Log += Log;
+            Client.Log += Log;
             
-            await client.LoginAsync(TokenType.Bot, token);
-            await client.StartAsync();
-
-            EventManager.RegisterEvents(client);
-            EventHandlerRegister.RegisterEventHandlers();
-
+            await Client.LoginAsync(TokenType.Bot, token);
+            await Client.StartAsync();
+            
             // Block this task until the program is closed.
             await Task.Delay(-1);
+        }
+        private static Task Initalize()
+        {
+            LevelRoles.CreateRoles(Client);
+            EventManager.RegisterEvents(Client);
+            EventHandlerRegister.RegisterEventHandlers();
+
+            return Task.CompletedTask;
         }
         private Task Log(LogMessage msg)
         {
