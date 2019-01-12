@@ -16,17 +16,15 @@ namespace Lil_Dan
             string database = args[3];
             string port = args[4];
             string password = args[5];
-
-            Database.Start(server, user, database, port, password);
-            Database.InsertProfile("119573797392220161", "AG", 546);
-            //new Program().MainAsync(token).GetAwaiter().GetResult();
-            Console.ReadLine();
+            
+            new Program().MainAsync(token).GetAwaiter().GetResult();
         }
              
 
         public async Task MainAsync(string token)
         {
             DiscordSocketClient client = new DiscordSocketClient();
+            LevelRoles.CreateRoles(client);
 
             client.Log += Log;
             
