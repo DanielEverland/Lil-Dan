@@ -11,7 +11,15 @@ namespace Lil_Dan
         public static void Main(string[] args)
         {
             string token = args[0];
-            new Program().MainAsync(token).GetAwaiter().GetResult();
+            string server = args[1];
+            string user = args[2];
+            string database = args[3];
+            string port = args[4];
+            string password = args[5];
+
+            Database.Start(server, user, database, port, password);
+            //new Program().MainAsync(token).GetAwaiter().GetResult();
+            Console.ReadLine();
         }
              
 
