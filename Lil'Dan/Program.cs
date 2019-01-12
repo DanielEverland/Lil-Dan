@@ -18,6 +18,7 @@ namespace Lil_Dan
             string password = args[5];
 
             Database.Start(server, user, database, port, password);
+            Database.InsertProfile("119573797392220161", "AG", 546);
             //new Program().MainAsync(token).GetAwaiter().GetResult();
             Console.ReadLine();
         }
