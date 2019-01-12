@@ -11,7 +11,7 @@ namespace Lil_Dan.Event_Handlers
         private const int POLL_INTERVAL = 1000;
         //private const int POLL_INTERVAL = 1000 * 60 * 5;
 
-        private Dictionary<SocketUser, int> deltaMessageCount = new Dictionary<SocketUser, int>();
+        private static Dictionary<SocketUser, uint> deltaMessageCount = new Dictionary<SocketUser, uint>();
 
         public void Register()
         {
@@ -32,7 +32,11 @@ namespace Lil_Dan.Event_Handlers
         {
             while (true)
             {
-
+                foreach (var pair in deltaMessageCount)
+                {
+                    uint currentCount = await Database.GetMesssageCount(pair.Key.Id);
+                    await Database.SetMessageCount(pair.Key.Id, pair.Value + currentCount);
+                }
 
                 await Task.Delay(POLL_INTERVAL);
             }

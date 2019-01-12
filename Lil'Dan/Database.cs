@@ -60,7 +60,12 @@ namespace Lil_Dan
             try
             {
                 MySqlCommand command = new MySqlCommand(query, _connection);
-                return (T)await command.ExecuteScalarAsync();
+                var value = await command.ExecuteScalarAsync();
+
+                if (value == null)
+                    return default(T);
+
+                return (T)value;
             }
             catch (Exception e)
             {

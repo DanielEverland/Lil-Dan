@@ -23,10 +23,18 @@ namespace Lil_Dan
             string port = args[4];
             string password = args[5];
             
-            new Program().MainAsync(token).GetAwaiter().GetResult();
+            try
+            {
+                Database.Start(server, user, database, port, password);
+                new Program().MainAsync(token).GetAwaiter().GetResult();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                throw;
+            }
         }
-             
-
+        
         public async Task MainAsync(string token)
         {
             Client = new DiscordSocketClient();
