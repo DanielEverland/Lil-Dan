@@ -2,6 +2,7 @@
 using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
+using Lil_Dan.Event_Handlers;
 
 namespace Lil_Dan
 {
@@ -16,12 +17,15 @@ namespace Lil_Dan
 
         public async Task MainAsync(string token)
         {
-            var client = new DiscordSocketClient();
+            DiscordSocketClient client = new DiscordSocketClient();
 
             client.Log += Log;
             
             await client.LoginAsync(TokenType.Bot, token);
             await client.StartAsync();
+
+            EventManager.RegisterEvents(client);
+            EventHandlerRegister.RegisterEventHandlers();
 
             // Block this task until the program is closed.
             await Task.Delay(-1);
