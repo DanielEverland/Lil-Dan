@@ -25,17 +25,17 @@ namespace Lil_Dan
             connection = new MySqlConnection(connectionString);
             connection.StateChange += OnStateChanged;
 
-            Console.WriteLine("Connecting to MySQL database...");
+            Debug.Log("Connecting to MySQL database...");
             
             await connection.OpenAsync();
         }
         private static void OnStateChanged(object sender, System.Data.StateChangeEventArgs e)
         {
-            Console.WriteLine($"MySQL State: {e.CurrentState}");
+            Debug.Log($"MySQL State: {e.CurrentState}");
         }
         private static void OnDatabaseMessage(object sender, MySqlInfoMessageEventArgs args)
         {
-            Console.WriteLine(args);
+            Debug.Log(args);
         }
         
         public static async Task<uint> GetMesssageCount(object id)
@@ -53,7 +53,7 @@ namespace Lil_Dan
 
         public static async Task<bool> HasProfile(object id)
         {
-            Console.WriteLine($"Checking if {id} exists");
+            Debug.Log($"Checking if {id} exists");
             string query = string.Format(QUERY_RETRIEVE_VALUE, VALUE_ID, id);
             
             try
@@ -67,15 +67,15 @@ namespace Lil_Dan
             }
             catch (Exception e)
             {
-                Console.WriteLine("---- QUERY FAILED ----");
-                Console.WriteLine($"{query}");
-                Console.WriteLine($"{e.Message}");
+                Debug.Log("---- QUERY FAILED ----");
+                Debug.Log($"{query}");
+                Debug.Log($"{e.Message}");
                 throw;
             }
         }
         private static async Task<T> GetValue<T>(string valueName, object id)
         {
-            Console.WriteLine($"Reading {valueName} WHERE ID: {id}");
+            Debug.Log($"Reading {valueName} WHERE ID: {id}");
             string query = string.Format(QUERY_RETRIEVE_VALUE, valueName, id);
 
             try
@@ -90,15 +90,15 @@ namespace Lil_Dan
             }
             catch (Exception e)
             {
-                Console.WriteLine("---- QUERY FAILED ----");
-                Console.WriteLine($"{query}");
-                Console.WriteLine($"{e.Message}");
+                Debug.Log("---- QUERY FAILED ----");
+                Debug.Log($"{query}");
+                Debug.Log($"{e.Message}");
                 throw;
             }            
         }
         private static async Task SetValue(string valueName, object id, object value)
         {
-            Console.WriteLine($"Setting {valueName} to \"{value}\" WHERE ID: {id}");
+            Debug.Log($"Setting {valueName} to \"{value}\" WHERE ID: {id}");
             string query = string.Format(QUERY_ASSIGN_VALUE, valueName, value, id);
 
             try
@@ -108,15 +108,15 @@ namespace Lil_Dan
             }
             catch (Exception e)
             {
-                Console.WriteLine("---- UPDATE FAILED ----");
-                Console.WriteLine($"{query}");
-                Console.WriteLine($"{e.Message}");
+                Debug.Log("---- UPDATE FAILED ----");
+                Debug.Log($"{query}");
+                Debug.Log($"{e.Message}");
                 throw;
             }
         }
         private static async Task InsertData(object id, object username, object messageCount)
         {
-            Console.WriteLine($"Inserting profile ({id}, {username}, {messageCount})");
+            Debug.Log($"Inserting profile ({id}, {username}, {messageCount})");
             string query = string.Format(QUERY_INSERT_PROFILE, id, username, messageCount);
 
             try
@@ -126,9 +126,9 @@ namespace Lil_Dan
             }
             catch (Exception e)
             {
-                Console.WriteLine("---- INSERTION FAILED ----");
-                Console.WriteLine($"{query}");
-                Console.WriteLine($"{e.Message}");
+                Debug.Log("---- INSERTION FAILED ----");
+                Debug.Log($"{query}");
+                Debug.Log($"{e.Message}");
                 throw;
             }            
         }

@@ -62,8 +62,8 @@ namespace Lil_Dan.Event_Handlers
                 LevelRoles.RemoveAllLevelRoles(user);
 
                 SocketRole role = LevelRoles.GetRoleFromIndex(potentialIndex);
-                
-                Console.WriteLine($"Adding {role.Name} to {user.Username}");
+
+                Debug.Log($"Adding {role.Name} to {user.Username}");
 
                 SocketGuildUser guildUser = Program.GetGuildUser(user);
                 guildUser.AddRoleAsync(role);

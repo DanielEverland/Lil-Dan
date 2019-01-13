@@ -31,7 +31,7 @@ namespace Lil_Dan
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                Debug.Log(e.StackTrace);
                 throw;
             }
         }
@@ -63,7 +63,7 @@ namespace Lil_Dan
         }
         private Task Log(LogMessage msg)
         {
-            Console.WriteLine(msg.ToString());
+            Debug.Log(msg.ToString());
             return Task.CompletedTask;
         }
         public static SocketGuildUser GetGuildUser(SocketUser user)
