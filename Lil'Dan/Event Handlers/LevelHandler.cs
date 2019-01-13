@@ -8,7 +8,11 @@ namespace Lil_Dan.Event_Handlers
 {
     public class LevelHandler : IEventHandler
     {
+#if DEBUG
+        private const int POLL_INTERVAL = 1000;
+#else
         private const int POLL_INTERVAL = 1000 * 60;
+#endif
 
         private static Dictionary<SocketUser, uint> deltaMessageCount = new Dictionary<SocketUser, uint>();
 

@@ -64,6 +64,8 @@ namespace Lil_Dan
                     Debug.Log("Waiting for connection to close...");
                     while (Client.ConnectionState != ConnectionState.Disconnected) { }
                     Debug.Log("Connection closed");
+
+                    await Task.Delay(10_000);
                 }
             }
         }

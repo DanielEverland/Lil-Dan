@@ -59,17 +59,16 @@ namespace Lil_Dan
 
         public static async Task<bool> HasProfile(object id)
         {
-            Debug.Log($"Checking if {id} exists");
             string query = string.Format(QUERY_RETRIEVE_VALUE, VALUE_ID, id);
-            
+            Debug.Log($"{query}");
+
             try
             {
                 MySqlCommand command = new MySqlCommand(query, connection);
-                System.Data.Common.DbDataReader reader = await command.ExecuteReaderAsync();
-                int count = reader.FieldCount;
-                reader.Close();
+                var value = await command.ExecuteScalarAsync();
+                Debug.Log($"    Value: {value}");
 
-                return count > 0;
+                return value != null;
             }
             catch (Exception e)
             {
@@ -81,13 +80,14 @@ namespace Lil_Dan
         }
         private static async Task<T> GetValue<T>(string valueName, object id)
         {
-            Debug.Log($"Reading {valueName} WHERE ID: {id}");
             string query = string.Format(QUERY_RETRIEVE_VALUE, valueName, id);
+            Debug.Log($"{query}");
 
             try
             {
                 MySqlCommand command = new MySqlCommand(query, connection);
                 var value = await command.ExecuteScalarAsync();
+                Debug.Log($"    Value: {value}");
 
                 if (value == null)
                     return default(T);
@@ -104,8 +104,8 @@ namespace Lil_Dan
         }
         private static async Task SetValue(string valueName, object id, object value)
         {
-            Debug.Log($"Setting {valueName} to \"{value}\" WHERE ID: {id}");
             string query = string.Format(QUERY_ASSIGN_VALUE, valueName, value, id);
+            Debug.Log($"{query}");
 
             try
             {
@@ -122,8 +122,8 @@ namespace Lil_Dan
         }
         private static async Task InsertData(object id, object username, object messageCount)
         {
-            Debug.Log($"Inserting profile ({id}, {username}, {messageCount})");
             string query = string.Format(QUERY_INSERT_PROFILE, id, username, messageCount);
+            Debug.Log($"{query}");
 
             try
             {
