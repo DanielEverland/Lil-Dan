@@ -8,7 +8,7 @@ namespace Lil_Dan.Event_Handlers
 {
     public class LevelHandler : IEventHandler
     {
-        private const int POLL_INTERVAL = 1000 * 60 * 5;
+        private const int POLL_INTERVAL = 1000 * 60;
 
         private static Dictionary<SocketUser, uint> deltaMessageCount = new Dictionary<SocketUser, uint>();
 
@@ -62,10 +62,8 @@ namespace Lil_Dan.Event_Handlers
                 LevelRoles.RemoveAllLevelRoles(user);
 
                 SocketRole role = LevelRoles.GetRoleFromIndex(potentialIndex);
-
-#if DEBUG
+                
                 Console.WriteLine($"Adding {role.Name} to {user.Username}");
-#endif
 
                 SocketGuildUser guildUser = Program.GetGuildUser(user);
                 guildUser.AddRoleAsync(role);

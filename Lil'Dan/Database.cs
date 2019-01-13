@@ -53,9 +53,7 @@ namespace Lil_Dan
 
         public static async Task<bool> HasProfile(object id)
         {
-#if DEBUG
             Console.WriteLine($"Checking if {id} exists");
-#endif
             string query = string.Format(QUERY_RETRIEVE_VALUE, VALUE_ID, id);
             
             try
@@ -77,9 +75,7 @@ namespace Lil_Dan
         }
         private static async Task<T> GetValue<T>(string valueName, object id)
         {
-#if DEBUG
             Console.WriteLine($"Reading {valueName} WHERE ID: {id}");
-#endif
             string query = string.Format(QUERY_RETRIEVE_VALUE, valueName, id);
 
             try
@@ -102,9 +98,7 @@ namespace Lil_Dan
         }
         private static async Task SetValue(string valueName, object id, object value)
         {
-#if DEBUG
             Console.WriteLine($"Setting {valueName} to \"{value}\" WHERE ID: {id}");
-#endif
             string query = string.Format(QUERY_ASSIGN_VALUE, valueName, value, id);
 
             try
@@ -122,9 +116,7 @@ namespace Lil_Dan
         }
         private static async Task InsertData(object id, object username, object messageCount)
         {
-#if DEBUG
             Console.WriteLine($"Inserting profile ({id}, {username}, {messageCount})");
-#endif
             string query = string.Format(QUERY_INSERT_PROFILE, id, username, messageCount);
 
             try
