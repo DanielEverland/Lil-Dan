@@ -25,9 +25,8 @@ namespace Lil_Dan
             string password = args[5];
             
             try
-            {
-                Database.Start(server, user, database, port, password);
-                new Program().MainAsync(token).GetAwaiter().GetResult();
+            {   
+                new Program().MainAsync(token, server, user, database, port, password).GetAwaiter().GetResult();
             }
             catch (Exception e)
             {
@@ -36,18 +35,50 @@ namespace Lil_Dan
             }
         }
         
-        public async Task MainAsync(string token)
+        public async Task MainAsync(string token, string server, string user, string database, string port, string password)
+        {
+            while (true)
+            {
+                Console.WriteLine("");
+                Debug.Log("---- STARTING NEW INSTANCE -----");
+                Console.WriteLine("");
+
+                try
+                {
+                    Database.Start(server, user, database, port, password);
+                    await RunBot(token);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log("---- EXCEPTION THROWN -----");
+                    Console.WriteLine(e.StackTrace);
+                    Console.WriteLine("");
+                }
+                finally
+                {
+                    Database.Close();
+
+                    Debug.Log("Closing client");
+                    await Client.StopAsync();
+
+                    Debug.Log("Waiting for connection to close...");
+                    while (Client.ConnectionState != ConnectionState.Disconnected) { }
+                    Debug.Log("Connection closed");
+                }
+            }
+        }
+        private async Task RunBot(string token)
         {
             Client = new DiscordSocketClient();
             Client.Ready += Initalize;
 
             Client.Log += Log;
-            
+
             await Client.LoginAsync(TokenType.Bot, token);
             await Client.StartAsync();
 
             await LevelHandler.PollMessageDeltas();
-            
+
             // Block this task until the program is closed.
             await Task.Delay(-1);
         }

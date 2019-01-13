@@ -29,6 +29,12 @@ namespace Lil_Dan
             
             await connection.OpenAsync();
         }
+        public static async void Close()
+        {
+            Debug.Log("Closing connection to MySQL database...");
+
+            await connection.CloseAsync();
+        }
         private static void OnStateChanged(object sender, System.Data.StateChangeEventArgs e)
         {
             Debug.Log($"MySQL State: {e.CurrentState}");
