@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Lil_Dan.Event_Handlers;
 
@@ -64,6 +65,18 @@ namespace Lil_Dan
         {
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;
+        }
+        public static SocketGuildUser GetGuildUser(SocketUser user)
+        {
+            foreach (SocketGuild guild in Client.Guilds)
+            {
+                var value = guild.Users.FirstOrDefault(x => x.Id == user.Id);
+
+                if (value != default(SocketGuildUser))
+                    return value;
+            }
+
+            throw new System.NullReferenceException();
         }
     }
 }

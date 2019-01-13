@@ -14,7 +14,7 @@ namespace Lil_Dan.Event_Handlers
         }
         private async Task OnUserJoined(SocketGuildUser user)
         {
-            await user.AddRoleAsync(LevelRoles.GetRole(0));
+            await user.AddRoleAsync(LevelRoles.GetRoleFromIndex(0));
         }
     }
 }

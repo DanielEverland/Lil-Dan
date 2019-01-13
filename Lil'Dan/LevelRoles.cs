@@ -25,9 +25,50 @@ namespace Lil_Dan
             // Level 100
             533521809933336626,
         };
+        private static List<uint> requiredMessages = new List<uint>()
+        {
+            // Level 1
+            0,
+            // Level 5
+            25,
+            // Level 10
+            100,
+            // Level 20
+            400,
+            // Level 50
+            2500,
+            // Level 100
+            10000,
+        };
         private static SocketRole[] roleObjects = new SocketRole[6];
+        
+        public static int GetRoleIndexFromMessageCount(uint messageCount)
+        {
+            for (int i = requiredMessages.Count - 1; i >= 0; i--)
+            {
+                if(messageCount >= requiredMessages[i])
+                {
+                    return i;
+                }
+            }
 
-        public static SocketRole GetRole(int index)
+            return 0;
+        }
+        public static int GetRoleIndexFromUser(SocketUser user)
+        {
+            SocketGuildUser guildUser = Program.GetGuildUser(user);
+
+            foreach (SocketRole role in guildUser.Roles)
+            {
+                if(roleIDs.Contains(role.Id))
+                {
+                    return roleIDs.IndexOf(role.Id);
+                }
+            }
+
+            return -1;
+        }
+        public static SocketRole GetRoleFromIndex(int index)
         {
             return roleObjects[index];
         }
@@ -51,6 +92,18 @@ namespace Lil_Dan
                 if (!roleObjects.Any(x => x.Id == roleID))
                 {
                     throw new NullReferenceException($"No role could be found for {roleID}");
+                }
+            }
+        }
+        public static void RemoveAllLevelRoles(SocketUser user)
+        {
+            SocketGuildUser guildUser = Program.GetGuildUser(user);
+
+            foreach (SocketRole role in guildUser.Roles)
+            {
+                if (roleIDs.Contains(role.Id))
+                {
+                    guildUser.RemoveRoleAsync(role);
                 }
             }
         }

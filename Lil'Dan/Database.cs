@@ -10,23 +10,24 @@ namespace Lil_Dan
 {
     public static class Database
     {
-        private static MySqlConnection _connection;
+        private static MySqlConnection connection;
 
         private const string QUERY_ASSIGN_VALUE = "UPDATE discordbot.user_profiles SET {0} = {1} WHERE (id = {2});";
         private const string QUERY_RETRIEVE_VALUE = "SELECT {0} FROM discordbot.user_profiles WHERE id = {1}";
         private const string QUERY_INSERT_PROFILE = "INSERT INTO discordbot.user_profiles (id, username, message_count) VALUES ({0}, \"{1}\", {2});";
 
         private const string VALUE_MESSAGE_COUNT = "message_count";
+        private const string VALUE_ID = "id";
 
         public static async void Start(string server, string user, string database, string port, string password)
         {
             string connectionString = $"server={server};user={user};database={database};port={port};password={password}";
-            _connection = new MySqlConnection(connectionString);
-            _connection.StateChange += OnStateChanged;
+            connection = new MySqlConnection(connectionString);
+            connection.StateChange += OnStateChanged;
 
             Console.WriteLine("Connecting to MySQL database...");
             
-            await _connection.OpenAsync();
+            await connection.OpenAsync();
         }
         private static void OnStateChanged(object sender, System.Data.StateChangeEventArgs e)
         {
@@ -50,6 +51,30 @@ namespace Lil_Dan
             await InsertData(id, username, messageCount);
         }
 
+        public static async Task<bool> HasProfile(object id)
+        {
+#if DEBUG
+            Console.WriteLine($"Checking if {id} exists");
+#endif
+            string query = string.Format(QUERY_RETRIEVE_VALUE, VALUE_ID, id);
+            
+            try
+            {
+                MySqlCommand command = new MySqlCommand(query, connection);
+                System.Data.Common.DbDataReader reader = await command.ExecuteReaderAsync();
+                int count = reader.FieldCount;
+                reader.Close();
+
+                return count > 0;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("---- QUERY FAILED ----");
+                Console.WriteLine($"{query}");
+                Console.WriteLine($"{e.Message}");
+                throw;
+            }
+        }
         private static async Task<T> GetValue<T>(string valueName, object id)
         {
 #if DEBUG
@@ -59,7 +84,7 @@ namespace Lil_Dan
 
             try
             {
-                MySqlCommand command = new MySqlCommand(query, _connection);
+                MySqlCommand command = new MySqlCommand(query, connection);
                 var value = await command.ExecuteScalarAsync();
 
                 if (value == null)
@@ -84,7 +109,7 @@ namespace Lil_Dan
 
             try
             {
-                MySqlCommand command = new MySqlCommand(query, _connection);
+                MySqlCommand command = new MySqlCommand(query, connection);
                 await command.ExecuteNonQueryAsync();
             }
             catch (Exception e)
@@ -104,7 +129,7 @@ namespace Lil_Dan
 
             try
             {
-                MySqlCommand command = new MySqlCommand(query, _connection);
+                MySqlCommand command = new MySqlCommand(query, connection);
                 int x = await command.ExecuteNonQueryAsync();
             }
             catch (Exception e)
